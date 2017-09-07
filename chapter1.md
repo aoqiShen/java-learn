@@ -6,11 +6,9 @@ HashMap采取的的是数组加联表的存储形式, 其中数据\(散列桶\)�
 
 若某一个元素加入到数据集合中 先判断其key的hash值, 之后会遍历链表中的元素, 加入到末尾
 
-其中列举了HashMap中重要的属性参数
+* 其中列举了HashMap中重要的属性参数
 
 ```
-
-static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
 
 // 证明Map的数据能映射到很大的范围
 static final int MAXIMUM_CAPACITY = 1 << 30;
@@ -60,7 +58,7 @@ static class Node<K,V> implements Map.Entry<K,V> {
             return false;
         }
     }
-    
+
     threshold是HashMap的重构阈值 是容量和负载因子的乘积， 若是数据量达到一定范围 会进行扩容
     final void putMapEntries(Map<? extends K, ? extends V> m, boolean evict) {
         int s = m.size();
@@ -83,11 +81,29 @@ static class Node<K,V> implements Map.Entry<K,V> {
     }
 ```
 
-
-
-
-
 ConcurrentHashMap与 HashMap的区别：
 
-通过CAS保证数据
+通过CAS及同步保证数据的安全性 
+
+
+
+HashTable 和HashMap的区别:
+
+```
+// HashTable
+public Set<K> keySet() {
+        if (keySet == null)
+            keySet = Collections.synchronizedSet(new KeySet(), this);
+        return keySet;
+}
+其中迭代器中的数据是copy过的
+
+// HashMap
+public Set<K> keySet() {
+        Set<K> ks;
+        return (ks = keySet) == null ? (keySet = new KeySet()) : ks;
+}
+```
+
+
 
